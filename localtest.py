@@ -41,7 +41,7 @@ def hexstr2binstr(h):
 # y = hashlib.sha256()
 found = 0
 block = "COMSM0010cloud"
-nonce = 4294967296
+nonce = 20000000
 
 for i in range(0,nonce,1):
     # print ("i=", i)
@@ -66,8 +66,12 @@ for i in range(0,nonce,1):
         found = 1
         break
 nonce = i
-print("nonce = ", nonce)
+# print >> "./out.txt", "nonce = ", nonce
 
+# print("nonce = ", nonce,file=f)
+
+f = open('./out.txt','w')
+f.write("nonce = "+str(nonce))
 
 
 
