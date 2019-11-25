@@ -4,7 +4,7 @@ import boto3
 
 f1 = open("./ttt1.txt", "w")
 f1.write("run"+"\n")
-
+f = open("./out2.txt","w")
 
 sqs = boto3.client("sqs")
 response = sqs.get_queue_url(QueueName="Task_Q.fifo")
@@ -32,10 +32,10 @@ for receive in range(1, 4, 1):
         QueueUrl=queue_url,
         ReceiptHandle=receipt_handle
     )
-    f1.write("run3" + "\n")
+
 
     print("Received and deleted message: %s" % message)
-    f = open("./out2.txt","w")
+
     f.write("Received and deleted message: "+str(message)+"\n")
-    f.close()
-    f1.close()
+f.close()
+f1.close()
