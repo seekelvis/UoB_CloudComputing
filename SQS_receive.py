@@ -2,6 +2,9 @@ import hashlib
 import time
 import boto3
 
+f1 = open("./out3.txt", "w")
+f1.write("run")
+f1.close()
 # diff = 4
 # found = 0
 # block = "COMSM0010cloud"
@@ -73,6 +76,7 @@ for receive in range(1, 4, 1):
         QueueUrl=queue_url,
         ReceiptHandle=receipt_handle
     )
+
 
     print("Received and deleted message: %s" % message)
     f = open("./out2.txt","w")
