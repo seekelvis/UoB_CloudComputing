@@ -43,7 +43,7 @@ nonce = i
 
 # print("nonce = ", nonce,file=f)
 spend = toc -tic
-f = open("./out.txt","w")
+f = open("./out0.txt","w")
 f.write("gold nonce = "+str(nonce)+"\n")
 f.write("cost time = "+str(spend)+"\n")
 f.close()
