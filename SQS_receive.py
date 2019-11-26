@@ -5,12 +5,13 @@ import boto3
 # f1 = open("./debug1.txt", "w")
 
 f = open("./out_receive.txt","w")
-
+f.write("debug:1"+"\n")
 sqs = boto3.client("sqs")
+f.write("debug:2"+"\n")
 response = sqs.get_queue_url(QueueName="Task_Q.fifo")
-
+f.write("debug:3"+"\n")
 queue_url = response["QueueUrl"]
-f.write("debug:"+"\n")
+f.write("debug:4"+"\n")
 for receive in range(1, 4, 1):
     f.write("debug:1" + "\n")
     print("debug:a")
