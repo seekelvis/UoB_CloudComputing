@@ -3,14 +3,14 @@ import time
 import boto3
 
 # f1 = open("./debug1.txt", "w")
-# f1.write("debug:"+"\n")
+
 f = open("./out_receive.txt","w")
 
 sqs = boto3.client("sqs")
 response = sqs.get_queue_url(QueueName="Task_Q.fifo")
 
 queue_url = response["QueueUrl"]
-
+f.write("debug:"+"\n")
 for receive in range(1, 4, 1):
     f.write("debug:1" + "\n")
     print("debug:a")
