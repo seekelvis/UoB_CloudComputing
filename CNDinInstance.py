@@ -2,7 +2,7 @@ import hashlib
 import time
 import boto3
 
-diff = 7
+diff = 6
 found = 0
 block = "COMSM0010cloud"
 nonce = 65536
