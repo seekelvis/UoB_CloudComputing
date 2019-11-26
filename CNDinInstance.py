@@ -8,7 +8,7 @@ block = "COMSM0010cloud"
 nonce = 65536
 begin_nonce = 0
 end_nonce = 4194304
-sqs = boto3.client('sqs')
+sqs = boto3.client("sqs")
 
 
 def ReciveTask():
@@ -31,7 +31,7 @@ def ReciveTask():
             )
             message = content["Messages"][0]
             receipt_handle = message["ReceiptHandle"]
-            taskUnit = int(message['Body'])
+            taskUnit = int(message["Body"])
             Begin = int( message["MessageAttributes"]["Begin"]["StringValue"])
             End = int(message["MessageAttributes"]["End"]["StringValue"])
             sqs.delete_message(
@@ -76,13 +76,13 @@ def CND(begin,end):
     return -1
 
 def SQS_send_Result(goldNonce):
-    response = sqs.get_queue_url(QueueName='Result.fifo')
-    queue_url = response['QueueUrl']
+    response = sqs.get_queue_url(QueueName="Result.fifo")
+    queue_url = response["QueueUrl"]
     sqs.send_message(
         QueueUrl=queue_url,
         DelaySeconds=0,
-        MessageGroupId="1",
-        MessageDeduplicationId="1",
+        MessageGroupId=str(goldNonce)+str(time.time()),
+        MessageDeduplicationId=str(goldNonce)+str(time.time()),
         MessageBody=(
             str(goldNonce)
         )
@@ -97,7 +97,7 @@ def main():
     print(nonce)
     SQS_send_Result(nonce)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 
 
