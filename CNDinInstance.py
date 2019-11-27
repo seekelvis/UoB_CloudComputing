@@ -10,6 +10,13 @@ begin_nonce = 0
 end_nonce = 4194304
 sqs = boto3.client("sqs")
 
+def ReadDiff():
+    fo = open("diff.txt", "r")
+    for line in fo.readlines():
+        line = line.strip()
+        print("data = ", int(line))
+    fo.close()
+    return int(line)
 
 def ReciveTask():
     try:
@@ -90,6 +97,9 @@ def SQS_send_Result(goldNonce):
 
 def main():
     nonce = -1;
+    
+    diff = ReadDiff()
+    
     # receiveTask
     trunk = ReciveTask()
     while nonce == -1 :
