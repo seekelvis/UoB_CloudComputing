@@ -39,14 +39,14 @@ def ReciveTask():
             )
             message = content["Messages"][0]
             receipt_handle = message["ReceiptHandle"]
-            taskUnit = int(message["Body"])
+            Num_task = int(message["Body"])
             Begin = int( message["MessageAttributes"]["Begin"]["StringValue"])
             End = int(message["MessageAttributes"]["End"]["StringValue"])
             sqs.delete_message(
                 QueueUrl=queue_url,
                 ReceiptHandle=receipt_handle
             )
-            return [Begin,End]
+            return [Begin, End, Num_task]
     except:
         print("There is no task")
     else:
@@ -83,7 +83,7 @@ def CND(begin,end):
     # print("time = %s " %(time))
     return -1
 
-def SQS_send_Result(goldNonce):
+def SQS_send_Result(goldNonce, numTask):
     response = sqs.get_queue_url(QueueName="Result.fifo")
     queue_url = response["QueueUrl"]
     sqs.send_message(
@@ -91,9 +91,16 @@ def SQS_send_Result(goldNonce):
         DelaySeconds=0,
         MessageGroupId=str(goldNonce)+str(time.time()),
         MessageDeduplicationId=str(goldNonce)+str(time.time()),
+        MessageAttributes={
+            'num_Task': {
+                'StringValue': str(numTask),
+                'DataType': 'String'
+            },
+        },
         MessageBody=(
             str(goldNonce)
         )
+
     )
 
 def main():
@@ -102,12 +109,12 @@ def main():
     # diff = ReadDiff()
 
     # receiveTask
-    trunk = ReciveTask()
+
     while nonce == -1 :
-        nonce = CND(trunk[0],trunk[1])
         trunk = ReciveTask()
+        nonce = CND(trunk[0],trunk[1])
     print(nonce)
-    SQS_send_Result(nonce)
+    SQS_send_Result(nonce,trunk[2])
 
 if __name__ == "__main__":
     main()
