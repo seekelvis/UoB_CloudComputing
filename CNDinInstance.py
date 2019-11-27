@@ -53,7 +53,7 @@ def CND(begin,end):
 
     tic = time.time()
     for i in range(begin,end):
-
+        print(i)
         x = hashlib.sha256()
         y = hashlib.sha256()
         code = block + str(i)
@@ -94,6 +94,7 @@ def main():
     trunk = ReciveTask()
     while nonce == -1 :
         nonce = CND(trunk[0],trunk[1])
+        trunk = ReciveTask()
     print(nonce)
     SQS_send_Result(nonce)
 
