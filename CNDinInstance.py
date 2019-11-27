@@ -2,7 +2,7 @@ import hashlib
 import time
 import boto3
 
-diff = 6
+
 found = 0
 block = "COMSM0010cloud"
 nonce = 65536
@@ -10,13 +10,14 @@ begin_nonce = 0
 end_nonce = 4194304
 sqs = boto3.client("sqs")
 
-def ReadDiff():
+diff = -1
+if diff == -1:
     fo = open("/home/ubuntu/diff.txt", "r")
     for line in fo.readlines():
         line = line.strip()
         print("data = ", int(line))
     fo.close()
-    return int(line)
+    diff = int(line)
 
 def ReciveTask():
     try:
@@ -57,10 +58,10 @@ def CND(begin,end):
     checkstr = ""
     for i in range (0,diff):
         checkstr = checkstr + "0"
-
+    print ("diff = ", diff)
     tic = time.time()
     for i in range(begin,end):
-        print(i)
+        # print(i)
         x = hashlib.sha256()
         y = hashlib.sha256()
         code = block + str(i)
