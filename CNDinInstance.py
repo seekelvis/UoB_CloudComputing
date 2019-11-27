@@ -99,7 +99,7 @@ def SQS_send_Result(goldNonce):
 def main():
     nonce = -1;
 
-    diff = ReadDiff()
+    # diff = ReadDiff()
 
     # receiveTask
     trunk = ReciveTask()
