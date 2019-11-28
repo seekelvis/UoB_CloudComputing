@@ -59,7 +59,7 @@ def CND(begin,end):
     for i in range (0,diff):
         checkstr = checkstr + "0"
     print ("diff = ", diff)
-    tic = time.time()
+
     for i in range(begin,end):
         # print(i)
         x = hashlib.sha256()
@@ -76,14 +76,10 @@ def CND(begin,end):
             found = 1
             return nonce
             break
-    toc = time.time()
-    spend = toc - tic
 
-    # print("nonce = ", nonce)
-    # print("time = %s " %(time))
     return -1
 
-def SQS_send_Result(goldNonce, numTask):
+def SQS_send_Result(goldNonce, numTask,spend):
     response = sqs.get_queue_url(QueueName="Result.fifo")
     queue_url = response["QueueUrl"]
     sqs.send_message(
@@ -96,6 +92,10 @@ def SQS_send_Result(goldNonce, numTask):
                 'StringValue': str(numTask),
                 'DataType': 'String'
             },
+            'spend': {
+                'StringValue': str(spend),
+                'DataType': 'String'
+            }
         },
         MessageBody=(
             str(goldNonce)
@@ -110,11 +110,14 @@ def main():
 
     # receiveTask
 
+    tic = time.time()
     while nonce == -1 :
         trunk = ReciveTask()
         nonce = CND(trunk[0],trunk[1])
+    toc = time.time()
+    spend = toc - tic
     print(nonce)
-    SQS_send_Result(nonce,trunk[2])
+    SQS_send_Result(nonce,trunk[2],spend)
 
 if __name__ == "__main__":
     main()
