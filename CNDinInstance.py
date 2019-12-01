@@ -80,7 +80,7 @@ def CND(begin,end):
 
     return -1
 
-def SQS_send_Result(goldNonce, numTask,spend):
+def SQS_send_Result(goldNonce, numTask,toc,spend):
     response = sqs.get_queue_url(QueueName="Result.fifo")
     queue_url = response["QueueUrl"]
     sqs.send_message(
@@ -91,6 +91,10 @@ def SQS_send_Result(goldNonce, numTask,spend):
         MessageAttributes={
             'num_Task': {
                 'StringValue': str(numTask),
+                'DataType': 'String'
+            },
+            'toc': {
+                'StringValue': str(toc),
                 'DataType': 'String'
             },
             'spend': {
@@ -118,14 +122,9 @@ def SQS_send_ReadyTime(readyTime):
     )
 
 def main():
-    nonce = -1;
-
-    # diff = ReadDiff()
-
-    # receiveTask
-
     tic = time.time()
     SQS_send_ReadyTime(tic)
+    nonce = -1;
     while nonce == -1 :
         trunk = ReciveTask()
         if trunk == [-1,-1,-1]:
@@ -138,7 +137,7 @@ def main():
     if nonce == -1:
         SQS_send_Result(-1,-1,toc)
     else:
-        SQS_send_Result(nonce,trunk[2],toc)
+        SQS_send_Result(nonce,trunk[2],toc,spend)
 
 if __name__ == "__main__":
     main()
