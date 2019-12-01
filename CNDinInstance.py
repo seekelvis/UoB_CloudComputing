@@ -49,10 +49,11 @@ def ReciveTask():
             return [Begin, End, Num_task]
     except:
         print("There is no task")
+        return [-1,-1,-1]
     else:
         print("receive new task")
 
-    return 0
+
 
 def CND(begin,end):
     checkstr = ""
@@ -100,7 +101,20 @@ def SQS_send_Result(goldNonce, numTask,spend):
         MessageBody=(
             str(goldNonce)
         )
+    )
 
+def SQS_send_Ready(readyTime):
+    response = sqs.get_queue_url(QueueName="ReadyTime.fifo")
+    queue_url = response["QueueUrl"]
+    sqs.send_message(
+        QueueUrl=queue_url,
+        DelaySeconds=0,
+        MessageGroupId=str(readyTime) + str(time.time()),
+        MessageDeduplicationId=str(readyTime) + str(time.time()),
+
+        MessageBody=(
+            str(readyTime)
+        )
     )
 
 def main():
@@ -111,13 +125,20 @@ def main():
     # receiveTask
 
     tic = time.time()
+    SQS_send_Ready(tic)
     while nonce == -1 :
         trunk = ReciveTask()
+        if trunk == [-1,-1,-1]:
+            break
         nonce = CND(trunk[0],trunk[1])
     toc = time.time()
     spend = toc - tic
     print(nonce)
-    SQS_send_Result(nonce,trunk[2],spend)
+    #if nonce == -1 means find no nonce
+    if nonce == -1:
+        SQS_send_Result(-1,-1,toc)
+    else:
+        SQS_send_Result(nonce,trunk[2],toc)
 
 if __name__ == "__main__":
     main()
