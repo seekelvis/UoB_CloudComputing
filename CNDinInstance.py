@@ -103,7 +103,7 @@ def SQS_send_Result(goldNonce, numTask,spend):
         )
     )
 
-def SQS_send_Ready(readyTime):
+def SQS_send_ReadyTime(readyTime):
     response = sqs.get_queue_url(QueueName="ReadyTime.fifo")
     queue_url = response["QueueUrl"]
     sqs.send_message(
@@ -125,7 +125,7 @@ def main():
     # receiveTask
 
     tic = time.time()
-    SQS_send_Ready(tic)
+    SQS_send_ReadyTime(tic)
     while nonce == -1 :
         trunk = ReciveTask()
         if trunk == [-1,-1,-1]:
