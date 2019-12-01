@@ -135,7 +135,7 @@ def main():
     print(nonce)
     #if nonce == -1 means find no nonce
     if nonce == -1:
-        SQS_send_Result(-1,-1,toc)
+        SQS_send_Result(-1,-1,toc,spend)
     else:
         SQS_send_Result(nonce,trunk[2],toc,spend)
 
