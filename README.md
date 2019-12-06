@@ -15,13 +15,11 @@ The CND system includes 2 python files: `work_createInstance.py`, `CNDinInstance
   - Configure AWSCLI 
 - The way of uploading access_key to instances
   - If you upload your access_key to Instances by yourself, please delete line 201 - 217 in `work_createInstance.py`
-  - If not, please copy your access_key to  line 185 (ACCESS_KEY) in `work_createInstance.py`
+  - If not, please copy your access_key to  line 185 (ACCESS_KEY) in `work_createInstance.py`.
 
 ### Running
 
 `$ Python3 work_createInstance.py`
-
-
 
 
 
